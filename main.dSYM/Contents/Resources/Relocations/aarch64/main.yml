@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/joey/Desktop/DAA_coding_A1/main'
+relocations:     []
+...
