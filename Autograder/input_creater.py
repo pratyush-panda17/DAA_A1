@@ -1,11 +1,11 @@
 import random
 
-def generate_unique_2d_points(n, filename="points.txt"):
+def generate_unique_2d_points(n, filename="input.txt"):
     points = set()
     
     while len(points) < n:
-        x = random.randint(1, 500)
-        y = random.randint(1, 500)
+        x = random.randint(1, 800)
+        y = random.randint(1, 800)
         points.add((x, y))  # Ensures uniqueness
     
     with open(filename, "w") as f:
@@ -14,4 +14,4 @@ def generate_unique_2d_points(n, filename="points.txt"):
             f.write(f"{x} {y}\n")
 
 
-generate_unique_2d_points(1250)
+generate_unique_2d_points(400)

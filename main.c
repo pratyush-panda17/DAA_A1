@@ -7,11 +7,14 @@
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
+int counter = 0;
+
 int compareByXDescending(const void *a, const void *b) { //comparison function for two dimensional points. (x coordinate is given priority)
     Point *p1 = (Point *)a;
     Point *p2 = (Point *)b;
 
     // First compare by x in descending order
+    counter++;
     if (p2->x != p1->x) {
         return p2->x - p1->x;  // Descending order for x
     }
@@ -68,7 +71,7 @@ struct Node* rightRotate(struct Node* y){
  
     x->right = y;
     y->left = T2;
- 
+    
     y->height = MAX(getHeight(y->right), getHeight(y->left)) + 1;
     x->height = MAX(getHeight(x->right), getHeight(x->left)) + 1;
     
@@ -103,7 +106,6 @@ Node* nodeToInsertIn(Node* root,int y, Point point){ //when inserting in a layer
             return root2;
         }
     }
-    
     if (root->y_val>y){
         return nodeToInsertIn(root->left,y,point);
     }else{
@@ -234,7 +236,7 @@ void makeOutputFile(Node* root,FILE* outputFile){ //prints the output in the req
   
 int main(){
     int n;
-    scanf("%d", &n);
+    scanf("%d",&n);
     Point* points = (Point*)malloc(n * sizeof(Point));
 
     FILE *pointsFile = fopen("points.txt", "w");
@@ -242,12 +244,9 @@ int main(){
     for (int i = 0; i < n; i++) {
         scanf("%d %d", &points[i].x, &points[i].y);
     }
-
     for (int i = 0; i < n; i++) { //creating a points file for plotting
         fprintf(pointsFile,"%d %d\n", points[i].x, points[i].y);
     }
-
-
 
     qsort(points, n, sizeof(Point), compareByXDescending); //first sort the list of points in descending order
     
@@ -269,8 +268,6 @@ int main(){
         }
     }
     FILE *staircaseFile = fopen("staircase.txt", "w");
-
-
     getStaircases(root,staircaseFile);
     fclose(pointsFile);
     fclose(staircaseFile);

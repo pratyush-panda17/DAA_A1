@@ -1,5 +1,12 @@
 # Python script for checking if a given output is valid without looking at the input.
 
+import hashlib
+import os
+
+def list_files_in_folder(folder):
+    """Get the file paths of all files in a given folder."""
+    return [os.path.join(folder, f) for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+
 def isDominated(layer1,layer2):
     for point1 in layer1:
         counter = 0
@@ -55,12 +62,50 @@ def count_blocks(filename):
 
     return block_count
 
-filename = "Outputs/output3.txt"  
 
-blocks = read_blocks(filename)
-n = count_blocks(filename)
+def are_files_identical(file1_path, file2_path):
+    try:
+        with open(file1_path, 'r') as file1, open(file2_path, 'r') as file2:
+            # Use zip_longest to handle files of different lengths
+            from itertools import zip_longest
+            
+            for line_num, (line1, line2) in enumerate(zip_longest(file1, file2), 1):
+                # If one file has more lines than the other
+                if line1 is None or line2 is None:
+                    print(f"Files differ at line {line_num}: One file is longer than the other")
+                    return False
+                    
+                # Compare each line
+                if line1.strip() != line2.strip():
+                    print(f"Files differ at line {line_num}")
+                    print("Test line : " + line2)
+                    print("Input Line: "+line1)
+                    return False
+                    
+            return True
+            
+    except FileNotFoundError:
+        print("Error: One or both files not found.")
+        return False
+    except Exception as e:
+        print(f"Error: {e}")
+        return False
 
-# for i, block in enumerate(blocks):
-#     print(f"Block {i+1}: {block}")
+scores = {1:2.5,2:2.5,3:5}
 
-print(checker(blocks,n))
+studentInputs = list_files_in_folder("./Autograder/Student_Inputs")
+testCases = ['./Autograder/Outputs/output1.txt', './Autograder/Outputs/output2.txt', './Autograder/Outputs/output3.txt']
+print(studentInputs)
+print(testCases)
+
+
+score = 0
+for i in range(1,4):
+    if are_files_identical(studentInputs[i-1],testCases[i-1]):
+        print(f"Test Case {i} Passed")
+        score += scores[i]
+        continue
+    print(f"Test Case {i} failed")
+    
+print(score)
+
